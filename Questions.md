@@ -124,11 +124,19 @@
 
 任务：从fastq/fasta文件中，根据目标序列的ID，提取出目标序列保存为一个新的fastq/fasta文件
 
+查看解题思路，[点这里](./How2Deal.md#for-beginer-3)
+
+**友情提示**：请先尝试继续解决，然后再查看解题思路和示例代码
+
 <a name="for-beginer-4"><h3>4. 双端未匹配数据的重新匹配 [<sup>目录</sup>](#content)</h3></a>
 
 给定：一个样本的双端测序文件（Attachments文件夹下的R1.fastq和R2.fastq），且这双端Forward-end与Reverse-end同一行的序列并非如标准PE数据那样一一对应，即来源于同一个fragment
 
 任务：只保留有双端序列的fragment，输出到处理后的双端Fastq文件，且让它在两个fastq文件的同一行一一对应
+
+查看解题思路，[点这里](./How2Deal.md#for-beginer-4)
+
+**友情提示**：请先尝试继续解决，然后再查看解题思路和示例代码
 
 <a name="for-beginer-5"><h3>5. 将输入的大Fasta文件拆分成若干个小Fasta文件 [<sup>目录</sup>](#content)</h3></a>
 
