@@ -36,7 +36,7 @@
 
 将给定的ID list文件逐行读入，若该ID所代表的序列在给定的Fasta/Fastq文件中存在，则在前面所创建的哈希变量中就能找到和它对应的键名(key)，则将其写出，否则给出提示：No such sequence!
 
-示例代码，[点这里](./Attachment/extractSeqFromFasta.pl)
+示例代码，[点这里](./Answers/extractSeqFromFasta.pl)
 
 <a name="for-beginer-4"><h3>4. 双端未匹配数据的重新匹配 [<sup>目录</sup>](#content)</h3></a>
 
