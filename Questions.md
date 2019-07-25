@@ -70,6 +70,37 @@
     - 给出你的示例代码（请把注释信息写清楚，方便大家阅读你的代码）；
 
     最后就是提交方式了
+    
+    - 首先，你要Fork一下咱们这个仓库
+
+    ![](./picture/BioLeetCode_Guide-1.png)
+
+    - 然后，直接在你Fork的那个分支仓库下编辑对应的文件
+    
+        - 描述问题，请在`Questions.md`下编辑，需要给出测试数据的链接，并在这部分的结尾部分，附上定向到“编程解决思路”的链接；
+        - 编程解决思路，请在`How2Deal.md`下编辑并在这部分的结尾部分，附上定向到“示例代码”的链接；
+        - 测试数据，请提交到`Attachment`文件夹下；
+        - 示例代码，请提交到`Answers`文件夹下；
+
+    - 做好上面的编辑后，将其提交到主分支
+    
+        点击提交按钮：
+
+        ![](./picture/BioLeetCode_Guide-2.png)
+
+        设置你要提交到哪个目标分支上
+
+        ![](./picture/BioLeetCode_Guide-3.png)
+
+        选择初始分支，即`base repository`
+
+        ![](./picture/BioLeetCode_Guide-4.png)
+
+        最后，点击点击提交按钮，完成提交
+
+        ![](./picture/BioLeetCode_Guide-5.png)
+
+        剩下的便是等待hub主的审核了
 
 <a name="for-beginer"><h2>入门题 [<sup>目录</sup>](#content)</h2></a>
 
