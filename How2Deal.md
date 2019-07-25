@@ -40,6 +40,18 @@
 
 <a name="for-beginer-4"><h3>4. 双端未匹配数据的重新匹配 [<sup>目录</sup>](#content)</h3></a>
 
+(1) 解析Fastq文件
+
+对双端的两个Fastq文件分别进行解析，保存成两组哈希，每组哈希有两个哈希变量，分别保存：`ID -> Seq` 和 `ID -> Qual`
+
+解析方法与 [3. 根据序列ID，提取目标序列](for-beginer-3)中的相同
+
+(2) 找出双端能匹配的fragments将它们分别在输出的两个Fastq文件中在同一行写出
+
+以两组哈希中的任意一组中的一个哈希的键进行遍历，例如以组一的`ID -> Seq`的键进行遍历，然后在另一组的`ID -> Seq`中查到对应的键是否存在，若存在，就说明双端是配对的，则进行输出
+
+示例代码，[点这里](./Answers/PairsMate.pl)
+
 <a name="for-beginer-5"><h3>5. 将输入的大Fasta文件拆分成若干个小Fasta文件 [<sup>目录</sup>](#content)</h3></a>
 
 <a name="for-user-with-middle-level"><h2>进阶题 [<sup>目录</sup>](#content)</h2></a>
