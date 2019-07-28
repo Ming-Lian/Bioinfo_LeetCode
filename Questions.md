@@ -17,6 +17,7 @@
     - [1. 从Fastq文件中随机抽样一定量的数据](#for-user-with-middle-level-1)
     - [2. 将输入的大矩阵文件按照列拆分成若干个sub-matrixs文件](#for-user-with-middle-level-2)
     - [3. 将若干个单样本的表达定量结果汇总成一个大矩阵，即expression profile matrix](#for-user-with-middle-level-3)
+    - [4. 利用Needleman–Wunsch 算法来编写一个简单的全局比对程序](#for-user-with-middle-level-4)
 
 - [挑战题](#for-veterans)
     - [1. 分层Bootstrap抽样](#for-veterans-1)
@@ -183,6 +184,11 @@
 任务：将将若干个单样本的表达定量结果汇总成一个大矩阵
 
 要求：使用Perl、Python或R编写，从头实现，不允许调用现成的包或工具模块
+<a name="for-user-with-middle-level-4"><h3>4. 利用Needleman–Wunsch 算法来编写一个简单的全局比对程序 [<sup>目录</sup>](#content)</h3></a>
+
+给定：两条序列，核酸或者蛋白质
+
+任务：求两条序列的最优比对方案以获得最大相似度
 
 <a name="for-veterans"><h2>挑战题 [<sup>目录</sup>](#content)</h2></a>
 
