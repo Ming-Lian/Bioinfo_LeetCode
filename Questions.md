@@ -189,6 +189,7 @@
 给定：两条序列，核酸或者蛋白质
 
 任务：求两条序列的最优比对方案以获得最大相似度
+查看解题思路，[点这里](./How2Deal.md#for-user-with-middle-level-4)
 
 <a name="for-veterans"><h2>挑战题 [<sup>目录</sup>](#content)</h2></a>
 
