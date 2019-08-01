@@ -62,6 +62,9 @@
 <a name="for-user-with-middle-level-1"><h3>1. 从Fastq文件中随机抽样一定量的数据 [<sup>目录</sup>](#content)</h3></a>
 
 <a name="for-user-with-middle-level-4"><h3>4. 利用Needleman–Wunsch 算法来编写一个简单的全局比对程序[<sup>目录</sup>](#content)</h3></a>
+
 （1）熟悉Needleman–Wunsch算法，可以在纸上利用二维矩阵画出最优的比对路线。
+
 （2）然后你在纸上如何画的，你就如何写程序实现。如，先初始化一个二维矩阵，填写必要数据，按照公式，将矩阵中的每一小格都填好数据，其中每一小格需记录好，累积分数和最优来源。数据填完就开始回溯找出比对方案.
+
 示例代码：[点这里](./Answers/max_similarity.py)
