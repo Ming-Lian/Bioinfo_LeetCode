@@ -173,9 +173,9 @@
 
 <a name="for-user-with-middle-level-3"><h3>3. 将若干个单样本的表达定量结果汇总成一个大矩阵，即expression profile matrix [<sup>目录</sup>](#content)</h3></a>
 
-给定：保存在同一个文件夹下的若干个单样本的表达定量文件（[测试数据](./Attachments/Samples_profile.tar.gz)，请下载后请先用`tar zxvf`命令解压），即有n行2列，每一行表示一个基因/转录本的定量，第一列是行名，即每每个基因/转录本的ID，第二列是样本
+给定：保存在同一个文件夹下的若干个单样本的表达定量文件（[测试数据](./Attachments/Samples_profile.tar.gz)，请下载后请先用`tar zxvf`命令解压），即有n行2列，每一行表示一个基因/转录本的定量，第一列每个基因/转录本的ID，第二列是对应基因/转录本在该样本的定量值，且每个文件的命名形式为：`sample+suffix`，即`样本名+固定后缀`
 
-| GeneID | Sample_i |
+| GeneID | Quant |
 |:---:|:---:|
 | g1 | 12 |
 | g2 | 44 |
