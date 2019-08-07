@@ -183,6 +183,8 @@
 
 任务：将将若干个单样本的表达定量结果汇总成一个大矩阵
 
+查看解题思路，[点这里](./How2Deal.md#for-user-with-middle-level-3)
+
 要求：使用Perl、Python或R编写，从头实现，不允许调用现成的包或工具模块
 <a name="for-user-with-middle-level-4"><h3>4. 利用Needleman–Wunsch 算法来编写一个简单的全局比对程序 [<sup>目录</sup>](#content)</h3></a>
 
