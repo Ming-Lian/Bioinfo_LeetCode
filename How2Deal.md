@@ -61,6 +61,38 @@
 
 <a name="for-user-with-middle-level-1"><h3>1. 从Fastq文件中随机抽样一定量的数据 [<sup>目录</sup>](#content)</h3></a>
 
+<a name="for-user-with-middle-level-3"><h3>3. 将若干个单样本的表达定量结果汇总成一个大矩阵，即expression profile matrix [<sup>目录</sup>](#content)</h3></a>
+
+本题有两个推荐的实现思路：
+
+1. **通过构造双重哈希实现**
+
+    （1）根据指定的文件夹（下面记作`dir`）和文件后缀（下面记作`pattern`），将文件路径为`dir/*pattern`的文件逐一读入，然后保存为双重哈希形式，即
+
+    <p align="center">%H={feature → {sample → quant}}</p>
+
+    同时记录下样本名的列表 @S，最后输出的矩阵的列所表示的样本的顺序，由样本名列表 @S 确定
+
+    （2）然后，根据上面构造出来的双重哈希 %H 和样本名列表 @S，对每个 feature 逐行写出到输出文件中，若当前 feature 为 i，遍历样本名列表 @S，若当前样本名为 j，则 feature i 在样本 i 的取值记为 n<sub>ij</sub>，缺失值用0填充
+
+    <p align="center">n<sub>ij</sub> = defined(H{i}{j}) ? H{i}{j} : 0</p>
+
+2. **先构造初始矩阵，然后再进行填充**
+
+    （1）根据指定的文件夹（下面记作`dir`）和文件后缀（下面记作`pattern`），将文件路径为`dir/*pattern`的文件逐一读入，得到 unique feature list 和 sample list，为了方便后面的说明，分别设为变量 @feature_list 和 @sample_list
+
+    （2）根据 @feature_list 和 @sample_list，构造初始矩阵，行数为 @feature_list 的长度，列数为 @sample_list 的长度，矩阵中的每一个元素的值都赋为0（以0为缺省值）
+
+    矩阵的行与 @feature_list 对应，矩阵的列与 @sample_list 对应
+
+    （3）再根据指定的文件夹（下面记作`dir`）和文件后缀（下面记作`pattern`），将文件路径为`dir/*pattern`的文件逐一读入：
+    
+    - 根据读入的文件的文件名，获取样本id，将它与 @sample_list 比较，从而确定对应的矩阵的列索引 j；
+    
+    - 根据读入文件中第一列的GeneId，将它与 @feature_list 比较，从而确定对应的矩阵的行索引 i；
+
+    获得行索引 i 和列索引 j 之后，就修改矩阵中对应元素的值了
+
 <a name="for-user-with-middle-level-4"><h3>4. 利用Needleman–Wunsch 算法来编写一个简单的全局比对程序[<sup>目录</sup>](#content)</h3></a>
 
 （1）熟悉Needleman–Wunsch算法，可以在纸上利用二维矩阵画出最优的比对路线。
