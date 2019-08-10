@@ -76,6 +76,8 @@
     （2）然后，根据上面构造出来的双重哈希 %H 和样本名列表 @S，对每个 feature 逐行写出到输出文件中，若当前 feature 为 i，遍历样本名列表 @S，若当前样本名为 j，则 feature i 在样本 i 的取值记为 n<sub>ij</sub>，缺失值用0填充
 
     <p align="center">n<sub>ij</sub> = defined(H{i}{j}) ? H{i}{j} : 0</p>
+    
+    示例代码：[点这里（基于perl的实现）](./Answers/MatrixMaker.pl)
 
 2. **先构造初始矩阵，然后再进行填充**
 
