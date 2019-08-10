@@ -94,6 +94,10 @@
     - 根据读入文件中第一列的GeneId，将它与 @feature_list 比较，从而确定对应的矩阵的行索引 i；
 
     获得行索引 i 和列索引 j 之后，就修改矩阵中对应元素的值了
+    
+    注意：该方法适用于数据量比较小的情况，当数据量比较大时，推荐用第一种方法实现
+    
+    示例代码：[点这里（基于R的实现）](./Answers/MatrixMaker.R)
 
 <a name="for-user-with-middle-level-4"><h3>4. 利用Needleman–Wunsch 算法来编写一个简单的全局比对程序[<sup>目录</sup>](#content)</h3></a>
 
