@@ -10,27 +10,46 @@ import os
 import argparse
 import csv
 
+
+def make_dict(filename):
+    """
+    Notice :This function fot file with head, to handle file without header, please use makedict2
+    Change every file to a dict, used for make_prematrix function to make pre_matrix
+    :param filename: one sample expression file. First column should be geneID, second should be expression
+    :return:{sample:name1,gene1:expression1..........}
+    """
+    with open(filename, "r") as f:
+        lines = f.readlines()
+        tmp_dict = {"sample": lines[0].strip().split("\t")[1]}
+        for line in lines[1:]:
+            tmp_dict[line.strip().split("\t")[0]] = line.strip().split("\t")[1]
+        return tmp_dict
+
+
+def make_dict2(directory, filename):
+    """
+    Change every file to a dict, used for make_prematrix function to make pre_matrix
+    :param filename: one sample expression file. First column should be geneID, second should be expression
+            directory:self.dir
+    :return:{sample:name1,gene1:expression1..........}
+    """
+    with open(os.path.join(directory, filename), "r") as f:
+        lines = f.readlines()
+        tmp_dict = {"sample": filename.strip().split(".")[0]}
+        for line in lines:
+            tmp_dict[line.strip().split("\t")[0]] = line.strip().split("\t")[1]
+        return tmp_dict
+
+
 class MergeMatrix:
-    def __init__(self, input_directory):
+    def __init__(self, input_directory, header):
         self.dir = input_directory
         self.file = os.listdir(input_directory)
         self.pre_matrix = []
         self.matrix = []
         self.gene_set = set()
         self.sample_name = []
-
-    def make_dict(self, filename):
-        """
-        Change every file to a dict, used for make_prematrix function to make pre_matrix
-        :param filename: one sample expression file. First column should be geneID, second should be expression
-        :return:{sample:name1,gene1:expression1..........}
-        """
-        with open(filename, "r") as f:
-            lines = f.readlines()
-            tmp_dict = {"sample": lines[0].strip().split("\t")[1]}
-            for line in lines[1:]:
-                tmp_dict[line.strip().split("\t")[0]] = line.strip().split("\t")[1]
-            return tmp_dict
+        self.header = header
 
     def make_prematrix(self):
         """
@@ -40,13 +59,22 @@ class MergeMatrix:
                   ......
                   {sample:name100,gene1:expression1..........}]
         """
-        for _ in self.file:
-            tmp_dict = self.make_dict(os.path.join(self.dir, _))
-            self.pre_matrix.append(tmp_dict)
-            self.sample_name.append(tmp_dict["sample"])
-            tmp_set = set(tmp_dict.keys())
-            tmp_set.remove("sample")
-            self.gene_set |= tmp_set
+        if self.header is True:
+            for _ in self.file:
+                tmp_dict = make_dict(os.path.join(self.dir, _))
+                self.pre_matrix.append(tmp_dict)
+                self.sample_name.append(tmp_dict["sample"])
+                tmp_set = set(tmp_dict.keys())
+                tmp_set.remove("sample")
+                self.gene_set |= tmp_set
+        else:
+            for _ in self.file:
+                tmp_dict = make_dict2(self.dir, _)
+                self.pre_matrix.append(tmp_dict)
+                self.sample_name.append(tmp_dict["sample"])
+                tmp_set = set(tmp_dict.keys())
+                tmp_set.remove("sample")
+                self.gene_set |= tmp_set
 
     def make_matrix(self):
         """
@@ -62,7 +90,7 @@ class MergeMatrix:
         gene_list = list(self.gene_set)
         gene_list.insert(0, "zhanwei")
         sample_index = dict()
-        gene_index =dict()
+        gene_index = dict()
         for index, sample_name in enumerate(self.matrix[0]):
             sample_index[sample_name] = index
         for index, gene_name in enumerate(gene_list):
@@ -82,11 +110,13 @@ if __name__ == '__main__':
     parser.add_argument('-i', '--input_directory', required=True,
                         help='<filepath>  The filepath contain file')
     parser.add_argument('-o', '--output_path', nargs='?', const="stdout", type=str, help='<filepath>  output_path')
+    parser.add_argument('--header', action="store_true", default=False, help='<bool>  if your data has header,please use --header',)
     args = parser.parse_args()
     input_dir = args.input_directory
     output_path = args.output_path
+    headerstatus = args.header
     # main pipeline
-    main_progress = MergeMatrix(input_dir)
+    main_progress = MergeMatrix(input_dir, headerstatus)
     main_progress.make_prematrix()
     main_progress.make_matrix()
     if output_path == "stdout":
