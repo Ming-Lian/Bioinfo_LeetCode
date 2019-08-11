@@ -97,7 +97,7 @@
     
     注意：该方法适用于数据量比较小的情况，当数据量比较大时，推荐用第一种方法实现
     
-    示例代码：[点这里（基于R的实现）](./Answers/MatrixMaker.R)
+    示例代码：[点这里（基于R的实现）](./Answers/MatrixMaker.R) [点这里（基于python的实现，该示例脚本由Zhongyi Hua同学提供）](./Answers/MatrixMaker.py) 
 
 <a name="for-user-with-middle-level-4"><h3>4. 利用Needleman–Wunsch 算法来编写一个简单的全局比对程序[<sup>目录</sup>](#content)</h3></a>
 
