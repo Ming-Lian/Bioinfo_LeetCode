@@ -142,7 +142,7 @@
 
 <a name="for-beginer-5"><h3>5. 将输入的大Fasta文件拆分成若干个小Fasta文件 [<sup>目录</sup>](#content)</h3></a>
 
-给定：一个包含有大量序列的Fasta文件
+给定：一个包含有大量序列的[Fasta文件](./Attachments/splitFasta.raw.fa)
 
 任务：将该Fasta文件均匀拆分成若干个子Fasta文件，使得每个子文件中的序列条数相同（允许最后一个子文件的序列条数少一些），且提供两个拆分选项：
 
