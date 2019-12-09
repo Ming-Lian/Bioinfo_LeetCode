@@ -204,6 +204,8 @@
 
 <a name="for-veterans-1"><h3>1. 分层Bootstrap抽样 [<sup>目录</sup>](#content)</h3></a>
 
+<a name="for-veterans-4"><h3>4. 相似数组搜索 [<sup>目录</sup>](#content)</h3></a>
+
 给定：
 
 > 从【[这里](https://github.com/Ming-Lian/Bioinfo_LeetCode/blob/master/Attachments/数组求相似.zip)】下载测试数据
