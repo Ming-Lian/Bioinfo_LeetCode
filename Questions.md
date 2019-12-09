@@ -21,9 +21,10 @@
 
 - [挑战题](#for-veterans)
     - [1. 分层Bootstrap抽样](#for-veterans-1)
-    - [2. 从头实现BWT算法的索引构建](#for-veterans-2)
-    - [3. 从头实现简易的BLAST算法](#for-veterans-3)
+    - [2. 从头实现BWT算法的索引构建和基于BWT索引实现简易的BWT比对](#for-veterans-2)
+    - [3. 从头实现简易的BLAST算法：从索引构建到seed-extend比对](#for-veterans-3)
     - [4. 相似数组搜索](#for-veterans-4)
+    - [5. 从头实现后缀树的序列比对：从树构建到序列比对](#for-veterans-5)
 
 <a name="introduction"><h2>项目说明 [<sup>目录</sup>](#content)</h2></a>
 
