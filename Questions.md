@@ -210,6 +210,7 @@
 给定：
 
 > 从【[这里](https://github.com/Ming-Lian/Bioinfo_LeetCode/blob/master/Attachments/数组求相似.zip)】下载测试数据
+## 此处原始数据错误，只有P.txt和R.txt，没有S.txt。待到改正后才能开始做题
 >
 > 数据有：
 >
