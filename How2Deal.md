@@ -1,6 +1,3 @@
-
-![](./picture/BioLeetCode_Logo.png)
-
 ## 解题思路提示
 
 <a name="content">目录</a>
@@ -15,13 +12,14 @@
     - [1. 从Fastq文件中随机抽样一定量的数据](#for-user-with-middle-level-1)
     - [2. 将输入的大矩阵文件按照列拆分成若干个sub-matrixs文件](#for-user-with-middle-level-2)
     - [3. 将若干个单样本的表达定量结果汇总成一个大矩阵，即expression profile matrix](#for-user-with-middle-level-3)
-    - [4. 利用Needleman–Wunsch 算法来编写一个简单的全局比对程序](#for-user-with-middle-level-4)
 - [挑战题](#for-veterans)
     - [1. 分层Bootstrap抽样](#for-veterans-1)
-    - [2. 从头实现BWT算法的索引构建和基于BWT索引实现简易的BWT比对](#for-veterans-2)
-    - [3. 从头实现简易的BLAST算法：从索引构建到seed-extend比对](#for-veterans-3)
-    - [4. 相似数组搜索](#for-veterans-4)
-    - [5. 从头实现后缀树的序列比对：从树构建到序列比对](#for-veterans-5)
+    - [2. 手写BWT](#for-veterans-2)
+      - [2.1. Burrows-Wheeler Transformation](#for-veterans-2-1)
+    - [3. 手写BLAST](#for-veterans-3)
+    - [4. 手写de Bruijn assembly](#for-veterans-4)
+    - [5. 相似数组搜索](#for-veterans-5)
+    - [6. 从头实现后缀树的序列比对：从树构建到序列比对](#for-veterans-6)
 
 <a name="for-beginer"><h2>入门题 [<sup>目录</sup>](#content)</h2></a>
 
@@ -85,11 +83,11 @@
 
 则剩下要做的就是逐行读入输入Fasta文件，通过对行首起始的`>`字符的识别来计数当前的Fasta序列的条数i，若i是能被n整除，则说明当前子文件刚好写满，此时要新起一个子文件
 
-示例代码，[点这里](./Answers/splitFasta.pl)
 
 <a name="for-user-with-middle-level"><h2>进阶题 [<sup>目录</sup>](#content)</h2></a>
 
 <a name="for-user-with-middle-level-1"><h3>1. 从Fastq文件中随机抽样一定量的数据 [<sup>目录</sup>](#content)</h3></a>
+
 
 <a name="for-user-with-middle-level-3"><h3>3. 将若干个单样本的表达定量结果汇总成一个大矩阵，即expression profile matrix [<sup>目录</sup>](#content)</h3></a>
 
@@ -106,8 +104,6 @@
     （2）然后，根据上面构造出来的双重哈希 %H 和样本名列表 @S，对每个 feature 逐行写出到输出文件中，若当前 feature 为 i，遍历样本名列表 @S，若当前样本名为 j，则 feature i 在样本 i 的取值记为 n<sub>ij</sub>，缺失值用0填充
 
     <p align="center">n<sub>ij</sub> = defined(H{i}{j}) ? H{i}{j} : 0</p>
-    
-    示例代码：[点这里（基于perl的实现）](./Answers/MatrixMaker.pl)
 
 2. **先构造初始矩阵，然后再进行填充**
 
@@ -124,23 +120,41 @@
     - 根据读入文件中第一列的GeneId，将它与 @feature_list 比较，从而确定对应的矩阵的行索引 i；
 
     获得行索引 i 和列索引 j 之后，就修改矩阵中对应元素的值了
-    
-    注意：该方法适用于数据量比较小的情况，当数据量比较大时，推荐用第一种方法实现
-    
-    示例代码：[点这里（基于R的实现）](./Answers/MatrixMaker.R) [点这里（基于python的实现，该示例脚本由Zhongyi Hua同学提供）](./Answers/MatrixMaker.py) 
-
-<a name="for-user-with-middle-level-4"><h3>4. 利用Needleman–Wunsch 算法来编写一个简单的全局比对程序[<sup>目录</sup>](#content)</h3></a>
-
-（1）熟悉Needleman–Wunsch算法，可以在纸上利用二维矩阵画出最优的比对路线。
-
-（2）然后你在纸上如何画的，你就如何写程序实现。如，先初始化一个二维矩阵，填写必要数据，按照公式，将矩阵中的每一小格都填好数据，其中每一小格需记录好，累积分数和最优来源。数据填完就开始回溯找出比对方案.
-
-示例代码：[点这里](./Answers/max_similarity.py)
-
 
 <a name="for-veterans"><h2>挑战题 [<sup>目录</sup>](#content)</h2></a>
 
-<a name="for-veterans-4"><h3>4. 相似数组搜索 [<sup>目录</sup>](#content)</h3></a>
+<a name="for-veterans-2"><h3>2. 手写BWT [<sup>目录</sup>](#content)</h3></a>
+
+<a name="for-veterans-2-1"><h4>2.1. Burrows-Wheeler Transformation [<sup>目录</sup>](#content)</h4></a>
+
+其实，这一小题里的任务，以及算法的基本操作过程已经很清楚了，关键是采用什么样的数据结构去实现它
+
+最简单的选择就是数组（以下以Perl语言的逻辑进行说明）：
+
+> 例如：给定的序列为 `TCATC`
+> 
+> 首先，将其打散成一个字符一个元素的数组，变成`@seq=('T','C','A','T','C')`，并在数组最后追加上一个终止标识符`$`，从而变成`@seq=('T','C','A','T','C','\$')`（注意这个终止标识符属于特殊字符，需要进行转义）
+> 
+> 随后，将这个数组当作一个队列使用，对队尾元素先出队，然后再将其在队首入队，例如：
+> 
+> ```perl
+> $tail = pop @seq;
+> unshift @seq, $tail;
+> ```
+> 
+> 重复执行这样的操作直到从队尾取出一个元素后，新的队尾是终止标识符时截至
+> 
+> 每执行一次，就将新队形的数组合并成字符串，追加保存到一个新数组中，例如`@BWT`：
+> 
+> ```perl
+>  $queue = join "",@seq;
+>  push @BWT, $queue;
+> ```
+> 最后，将`@BWT`中的字符串元素按照字母顺序逐一进行处理：提取最后一个字母
+
+示例代码：[Perl版本](./Answers/BWT_index.pl)
+
+<a name="for-veterans-5"><h3>5. 相似数组搜索 [<sup>目录</sup>](#content)</h3></a>
 
 算法实现的逻辑为：
 
@@ -183,5 +197,5 @@
 补充学习资料：
 
 > - 倒排索引：[什么是倒排索引？](https://blog.csdn.net/starzhou/article/details/87519973)
-
+>
 > - 链表：[Python实现链表](https://www.cnblogs.com/wangxiayun/p/8358991.html)
