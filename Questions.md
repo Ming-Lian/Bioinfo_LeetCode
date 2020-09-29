@@ -21,8 +21,12 @@
     - [1. 分层Bootstrap抽样](#for-veterans-1)
     - [2. 手写BWT](#for-veterans-2)
       - [2.1. Burrows-Wheeler Transformation](#for-veterans-2-1)
+      - [2.2. BWT reverse transformation](#for-veterans-2-2)
+      - [2.3. BWT search](#for-veterans-2-3)
     - [3. 手写BLAST](#for-veterans-3)
     - [4. 手写de Bruijn](#for-veterans-4)
+      - [4.1. 构建de Bruijn graph](#for-veterans-4-1)
+      - [4.2. 搜索欧拉路径](#for-veterans-4-2)
     - [5. 相似数组搜索](#for-veterans-5)
     - [6. 从头实现后缀树的序列比对：从树构建到序列比对](#for-veterans-6)
 
@@ -161,10 +165,15 @@
 
 <a name="for-user-with-middle-level-1"><h3>1. 从Fastq文件中随机抽样一定量的数据 [<sup>目录</sup>](#content)</h3></a>
 
-
 给定：双端FASTQ文件
 
 任务：按照用户指定的数据量，即多少bp，从原始的双端FASTQ文件中随机抽取序列，要求双端FASTQ文件中的序列必须配对
+
+要求：使用Perl、Python或R编写，从头实现，不允许调用现成的包或工具模块
+
+查看解题思路，[点这里](./How2Deal.md#for-user-with-middle-level-1)
+
+**友情提示**：请先尝试自行解决，然后再查看解题思路和示例代码
 
 <a name="for-user-with-middle-level-2"><h3>2. 将输入的大矩阵文件按照列拆分成若干个sub-matrixs文件 [<sup>目录</sup>](#content)</h3></a>
 
