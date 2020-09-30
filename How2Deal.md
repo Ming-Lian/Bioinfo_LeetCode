@@ -120,6 +120,8 @@ $$E(X)=N . \frac{n}{N}=n$$
 
     <p align="center">n<sub>ij</sub> = defined(H{i}{j}) ? H{i}{j} : 0</p>
 
+    示例代码：[Perl版本](./Answers/MatrixMaker.pl)
+
 2. **先构造初始矩阵，然后再进行填充**
 
     （1）根据指定的文件夹（下面记作`dir`）和文件后缀（下面记作`pattern`），将文件路径为`dir/*pattern`的文件逐一读入，得到 unique feature list 和 sample list，为了方便后面的说明，分别设为变量 @feature_list 和 @sample_list
@@ -135,6 +137,8 @@ $$E(X)=N . \frac{n}{N}=n$$
     - 根据读入文件中第一列的GeneId，将它与 @feature_list 比较，从而确定对应的矩阵的行索引 i；
 
     获得行索引 i 和列索引 j 之后，就修改矩阵中对应元素的值了
+
+    示例代码: [R版本](./Answers/MatrixMaker.R) [Python版本](./Answers/MatrixMaker.py)
 
 <a name="for-veterans"><h2>挑战题 [<sup>目录</sup>](#content)</h2></a>
 
