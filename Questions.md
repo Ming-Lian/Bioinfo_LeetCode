@@ -161,6 +161,10 @@
 
 使得用户可以根据两个选项中的一个进行拆分
 
+查看解题思路，[点这里](./How2Deal.md#for-beginer-5)
+
+**友情提示**：请先尝试自行解决，然后再查看解题思路和示例代码
+
 <a name="for-user-with-middle-level"><h2>进阶题 [<sup>目录</sup>](#content)</h2></a>
 
 <a name="for-user-with-middle-level-1"><h3>1. 从Fastq文件中随机抽样一定量的数据 [<sup>目录</sup>](#content)</h3></a>
@@ -199,6 +203,8 @@
 任务：将将若干个单样本的表达定量结果汇总成一个大矩阵
 
 要求：使用Perl、Python或R编写，从头实现，不允许调用现成的包或工具模块
+
+查看解题思路，[点这里](./How2Deal.md#for-user-with-middle-level-3)
 
 <a name="for-veterans"><h2>挑战题 [<sup>目录</sup>](#content)</h2></a>
 
