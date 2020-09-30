@@ -41,7 +41,7 @@
 
 将给定的ID list文件逐行读入，若该ID所代表的序列在给定的Fasta/Fastq文件中存在，则在前面所创建的哈希变量中就能找到和它对应的键名(key)，则将其写出，否则给出提示：No such sequence!
 
-示例代码，[点这里](./Answers/extractSeqFromFasta.pl)
+示例代码：[Perl版本](./Answers/extractSeqFromFasta.pl)
 
 <a name="for-beginer-4"><h3>4. 双端未匹配数据的重新匹配 [<sup>目录</sup>](#content)</h3></a>
 
@@ -55,7 +55,7 @@
 
 以两组哈希中的任意一组中的一个哈希的键进行遍历，例如以组一的`ID -> Seq`的键进行遍历，然后在另一组的`ID -> Seq`中查到对应的键是否存在，若存在，就说明双端是配对的，则进行输出
 
-示例代码，[点这里](./Answers/PairsMate.pl)
+示例代码：[Perl版本](./Answers/PairsMate.pl)
 
 <a name="for-beginer-5"><h3>5. 将输入的大Fasta文件拆分成若干个小Fasta文件 [<sup>目录</sup>](#content)</h3></a>
 
@@ -83,6 +83,7 @@
 
 则剩下要做的就是逐行读入输入Fasta文件，通过对行首起始的`>`字符的识别来计数当前的Fasta序列的条数i，若i是能被n整除，则说明当前子文件刚好写满，此时要新起一个子文件
 
+示例代码：[Perl版本](./Answers/splitFasta.pl)
 
 <a name="for-user-with-middle-level"><h2>进阶题 [<sup>目录</sup>](#content)</h2></a>
 
@@ -211,7 +212,7 @@ $$E(X)=N . \frac{n}{N}=n$$
 
     这样一个查询数组里的每个数值比较打分结束后，直接就得到了得分最高的数组
 
-示例代码：[点这里](./Answers/SimiArraySearch.py)
+示例代码：[Python版本](./Answers/SimiArraySearch.py)
 
 补充学习资料：
 
