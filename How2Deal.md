@@ -8,6 +8,8 @@
     - [3. 根据序列ID，提取目标序列](#for-beginer-3)
     - [4. 双端未匹配数据的重新匹配](#for-beginer-4)
     - [5. 将输入的大Fasta文件拆分成若干个小Fasta文件](#for-beginer-5)
+    - [6. 计算N50](#for-beginer-6)
+    - [7. 计算测序深度(Coverage Depth)与覆盖度(Coverage Breadth)](#for-beginer-7)
 - [进阶题](#for-user-with-middle-level)
     - [1. 从Fastq文件中随机抽样一定量的数据](#for-user-with-middle-level-1)
     - [2. 将输入的大矩阵文件按照列拆分成若干个sub-matrixs文件](#for-user-with-middle-level-2)
@@ -84,6 +86,22 @@
 则剩下要做的就是逐行读入输入Fasta文件，通过对行首起始的`>`字符的识别来计数当前的Fasta序列的条数i，若i是能被n整除，则说明当前子文件刚好写满，此时要新起一个子文件
 
 示例代码：[Perl版本](./Answers/splitFasta.pl)
+
+<a name="for-beginer-6"><h3>6. 计算N50 [<sup>目录</sup>](#content)</h3></a>
+
+可以分以下几步进行：
+
+（1）读入fasta文件中的每条contig序列
+
+（2）计算每条序列的长度，同时累加每条序列的长度得到总长度N
+
+（3）按照序列长度从大到小遍历每条序列$n_i$，并逐一累加序列长度$L+=n_i$，一旦$L\ge 0.5N$，则结束遍历，则最后那条被访问的序列的长度即为N50
+
+<p align='center'><img src=./picture/BioLeetCode_how2deal_easy-6.png /></p>
+
+示例代码：[Perl版本](./Answers/calc_N50.pl)
+
+<a name="for-beginer-7"><h3>7. 计算测序深度(Coverage Depth)与覆盖度(Coverage Breadth) [<sup>目录</sup>](#content)</h3></a>
 
 <a name="for-user-with-middle-level"><h2>进阶题 [<sup>目录</sup>](#content)</h2></a>
 
