@@ -10,11 +10,13 @@
     - [3. 根据序列ID，提取目标序列](#for-beginer-3)
     - [4. 双端未匹配数据的重新匹配](#for-beginer-4)
     - [5. 将输入的大Fasta文件拆分成若干个小Fasta文件](#for-beginer-5)
-    - [6. 根据数列求中位数](#for-beginer-6)
+    - [6. 计算N50](#for-beginer-6)
+    - [7. 计算测序深度(Coverage Depth)与覆盖度(Coverage Breadth)](#for-beginer-7)
 - [进阶题](#for-user-with-middle-level)
     - [1. 从Fastq文件中随机抽样一定量的数据](#for-user-with-middle-level-1)
     - [2. 将输入的大矩阵文件按照列拆分成若干个sub-matrixs文件](#for-user-with-middle-level-2)
     - [3. 将若干个单样本的表达定量结果汇总成一个大矩阵，即expression profile matrix](#for-user-with-middle-level-3)
+    - [4. 根据samtools mpileup的输出，推断genotype](#for-user-with-middle-level-4)
     - [5. 根据给定的Motif代表序列集算出PWM矩阵](#for-user-with-middle-level-5)
 
 - [挑战题](#for-veterans)
@@ -29,6 +31,7 @@
       - [4.2. 搜索欧拉路径](#for-veterans-4-2)
     - [5. 相似数组搜索](#for-veterans-5)
     - [6. 从头实现后缀树的序列比对：从树构建到序列比对](#for-veterans-6)
+    - [7. 手写samtools部分功能](#for-veterans-7)
 
 <a name="introduction"><h2>项目说明 [<sup>目录</sup>](#content)</h2></a>
 
@@ -114,6 +117,12 @@
     >
     >    剩下的便是等待hub主的审核了
 
+4. 无法查看github网页中的LaTex数学公式，怎么办？
+
+    在Chrome浏览器中安装**MathJax Plugin for Github**插件后，再刷新网页就可以正常解析查看了
+
+    由于在国内无法正常访问Chrome应用商店，所以在此之前请确保可以科学上网，可以通过手动安装[谷歌访问助手](https://github.com/Kenguba/google-access-helper)解决
+
 <a name="for-beginer"><h2>入门题 [<sup>目录</sup>](#content)</h2></a>
 
 <a name="for-beginer-1"><h3>1. RNA序列翻译成蛋白质 [<sup>目录</sup>](#content)</h3></a>
@@ -162,6 +171,61 @@
 使得用户可以根据两个选项中的一个进行拆分
 
 查看解题思路，[点这里](./How2Deal.md#for-beginer-5)
+
+**友情提示**：请先尝试自行解决，然后再查看解题思路和示例代码
+
+<a name="for-beginer-6"><h3>6. 计算N50 [<sup>目录</sup>](#content)</h3></a>
+
+给定：包含多条contig的fasta文件
+
+任务：计算这些contig的N50
+
+> 解释：什么是N50？
+> 
+> N50是用来评估de novo assembly结果拼接质量好坏的一个常用指标，它表示将所有contig按照序列长度从大到小排序后，累加长度刚好超过总长度50%的那条contig的长度
+> 
+> 一般来说，一个de novo assembly结果拼接质量越好，每条contig的长度会更长，则其N50就会越大
+
+查看解题思路，[点这里](./How2Deal.md#for-beginer-6)
+
+**友情提示**：请先尝试自行解决，然后再查看解题思路和示例代码
+
+<a name="for-beginer-7"><h3>7. 计算测序深度(Coverage Depth)与覆盖度(Coverage Breadth) [<sup>目录</sup>](#content)</h3></a>
+
+给定：samtools mpileup的输出文件（Pileup格式）
+
+> 文件形式如下图：
+>
+> <p align='center'><img src=./picture/BioLeetCode_issue_easy-7.png /></p>
+>
+> 其中，各列的含义为：
+>
+> | 列序号 | 列名 | 说明 |
+> |:---|:---|:---|
+> | 1 | Chromosome name | 参考序列的序列名 |
+> | 2 | 1-based position on the chromosome | 该序列的碱基位置（1-base）|
+> | 3 | Reference base at this position | 参考序列该碱基位置的碱基组成 |
+> | 4 | Number of reads covering this position | 该碱基位置覆盖的reads数 |
+> | 5 | Read bases | 覆盖该碱基位置的各碱基组成，其中 "." 和 "," 分别表示正负链的匹配，"ATCG" 和 "actg" 分别表示正负链的错配 |
+> | 6 | Base qualities | 碱基测序质量 |
+>
+> 详细的格式说明，请查看[samtools官网](http://www.htslib.org/doc/samtools-mpileup.html)
+
+任务：基于给定参考序列范围（可能有多条参考序列$s\in S$，假设正好为一个基因组）内的测序深度的分布$D(s, i)$（s表示参考序列， i表示该碱基位置的测序深度，$i\in [1, L_s]$）
+
+- 计算全基因的平均测序深度
+
+    $$D_{average}=\frac{\sum_{s\in S, i\in [1, L_s]}D(s,i)}{\sum_{s\in S}L_s}$$
+
+- 计算对应各个测序深度d下的基因组区域比例：
+
+    $$P(X=d)=\frac{\sharp\lbrace (s,i) \mid D(s,i)==d\rbrace}{\sharp\lbrace (s,i)\rbrace}$$
+
+- 计算不超于测序深度d的基因组区域比例：
+
+    $$P(X \le d)=\frac{\sharp\lbrace (s,i) \mid D(s,i)\le d\rbrace}{\sharp\lbrace (s,i)\rbrace}=\sum_{i=0}^{d}P(X=i)$$
+
+查看解题思路，[点这里](./How2Deal.md#for-beginer-7)
 
 **友情提示**：请先尝试自行解决，然后再查看解题思路和示例代码
 
