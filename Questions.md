@@ -295,7 +295,41 @@
 
 <a name="for-veterans-2-2"><h4>2.2. BWT reverse transformation [<sup>目录</sup>](#content)</h4></a>
 
-给定：
+给定：BWT output，以[2.1. Burrows-Wheeler Transformation](#for-veterans-2-1)的输出结果`CCTTA$`为例
+
+任务：根据BWT output，还原出其原始的输入序列
+
+实现BWT reverse transformation的方法有以下两种：
+
+（1）方法一：
+
+根据First Column(FC)与Last Column(LC)之间的存在的以下两种关系：
+
+- FC与LC在同一行$i$的碱基，在参考序列中是一后一前紧挨着的关系
+
+    利用这种关系，我们就可以某一个碱基的在参考序列的前一个碱基或者后一个碱基的组成
+
+- 按照从上到下的计数方式，FC中第i次遇到的碱基a与LC中第i次遇到的碱基a，是参考序列中的同一个碱基，即它们在参考序列上对应于同一个碱基位置
+
+    利用这种关系，我们可以FC（或LC）第i行碱基在LC（或FC）所对应的碱基的位置
+
+那么，利用上面的两条性质，我们可以按照下面的方法实现BWT逆变换：
+
+> 初始条件为：当前碱基位置index=0，即为FC的第一行，且当前碱基组成为base=\$，当前参考序列组成为T=\$
+> 
+> 循环执行下面的操作，直至当前碱基组成再一次为\$：
+> 
+> （1）回溯：获取LC同处于index行的碱基组成c，更新当前参考序列T=cT
+> 
+> （2）LC到FC的定位：获取LC处于index行的碱基c在FC对应的碱基的位置i，更新当前碱基位置index=i
+
+<p align='center'><img src=./picture/BioLeetCode_issue_Hard_2-2-1.png height=300/></p>
+
+要求：使用Perl、Python或R编写，从头实现，不允许调用现成的包或工具模块
+
+查看解题思路，[点这里](./How2Deal.md#for-veterans-2-2)
+
+**友情提示**：请先尝试自行解决，然后再查看解题思路和示例代码
 
 <a name="for-veterans-5"><h3>5. 相似数组搜索 [<sup>目录</sup>](#content)</h3></a>
 
