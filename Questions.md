@@ -25,6 +25,7 @@
       - [2.1. Burrows-Wheeler Transformation](#for-veterans-2-1)
       - [2.2. BWT reverse transformation](#for-veterans-2-2)
       - [2.3. BWT search](#for-veterans-2-3)
+      - [2.4. maximal exact matches (MEMs)](#for-veterans-2-4)
     - [3. 手写BLAST](#for-veterans-3)
     - [4. 手写de Bruijn](#for-veterans-4)
       - [4.1. 构建de Bruijn graph](#for-veterans-4-1)
@@ -278,7 +279,7 @@
 
 <a name="for-veterans-2-1"><h4>2.1. Burrows-Wheeler Transformation [<sup>目录</sup>](#content)</h4></a>
 
-给定：一条核酸序列
+给定：一条核酸序列，例如：TCATC
 
 任务：将该序列经过BW转换（Burrows-Wheeler Transformation），得到BWT输出，或者称为BWT索引（BWT index）
 
@@ -291,6 +292,10 @@
 查看解题思路，[点这里](./How2Deal.md#for-veterans-2-1)
 
 **友情提示**：请先尝试自行解决，然后再查看解题思路和示例代码
+
+<a name="for-veterans-2-2"><h4>2.2. BWT reverse transformation [<sup>目录</sup>](#content)</h4></a>
+
+给定：
 
 <a name="for-veterans-5"><h3>5. 相似数组搜索 [<sup>目录</sup>](#content)</h3></a>
 
