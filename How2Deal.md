@@ -17,7 +17,8 @@
 - [挑战题](#for-veterans)
     - [1. 分层Bootstrap抽样](#for-veterans-1)
     - [2. 手写BWT](#for-veterans-2)
-      - [2.1. Burrows-Wheeler Transformation](#for-veterans-2-1)
+        - [2.1. Burrows-Wheeler Transformation](#for-veterans-2-1)
+        - [2.2. BWT reverse transformation](#for-veterans-2-2)
     - [3. 手写BLAST](#for-veterans-3)
     - [4. 手写de Bruijn assembly](#for-veterans-4)
     - [5. 相似数组搜索](#for-veterans-5)
@@ -191,6 +192,67 @@ $$E(X)=N . \frac{n}{N}=n$$
 > 最后，将`@BWT`中的字符串元素按照字母顺序逐一进行处理：提取最后一个字母
 
 示例代码：[Perl版本](./Answers/BWT_index.pl)
+
+<a name="for-veterans-2-2"><h4>2.2. BWT reverse transformation [<sup>目录</sup>](#content)</h4></a>
+
+(1)方法一
+
+在任务说明中，已经列出了该方法实现BWT逆变换的过程：
+
+> 初始条件为：当前碱基位置index=0，即为FC的第一行，且当前碱基组成为base=\$，当前参考序列组成为T=\$
+> 
+> 循环执行下面的操作，直至当前碱基组成再一次为\$：
+> 
+> （1）回溯：获取LC同处于index行的碱基组成c，更新当前参考序列T=cT
+> 
+> （2）LC到FC的定位：获取LC处于index行的碱基c在FC对应的碱基的位置i，更新当前碱基位置index=i
+
+<p align='center'><img src=./picture/BioLeetCode_issue_Hard_2-2-1.png height=300/></p>
+
+那么现在的问题是：该如何分别实现上面的**回溯**和**LC到FC的定位**呢？
+
+对于**回溯**问题，很好解决，我只需要用到基于BWT得到的Last Column（下面为了方便讨论，将其称为BWT数组），则根据已知条件里给定的当前碱基位置index，则可以直接回溯得到LC同处于index行的碱基组成c=BWT[index]
+
+对于**LC到FC的定位**问题，由于FC列中的碱基组成是严格按照碱基优先级递增排列的，因此，只需要知道在参考序列T中碱基优先级小于当前碱基c的所有可能的碱基类型的计数总和Pre(c)，再加上当前碱基是同类碱基的计数次数OCC(c)，如下图：
+
+<p align='center'><img src=./picture/BioLeetCode_how2deal_Hard_2-2-1.png height=300/></p>
+
+则LC中索引位置为index的碱基c，它再FC中对应的同一碱基的索引位置为：
+
+$$\mathrm{LF(c,index)=Pre(c) + OCC(c)}$$
+
+因此，为了能够实现以上操作，我们需要额外增加以下两个索引信息：
+
+> - **Pre散列**：键为各种可能的碱基类型，键值为参考序列中碱基优先级小于对应碱基的碱基总数
+> - **OCC数组**：LC对应行碱基，在LC该行及该行之前出现的次数（0-base）
+
+<p align='center'><img src=./picture/BioLeetCode_how2deal_Hard_2-2-2.png height=400/></p>
+
+其中BWT数组和OCC数组是FM-index的组成部分，除此之外还包含SA数组（在BWT逆变换中还暂时用不到它，所以在该小节未设置该变量，它在下一小节BWT search中会用到），详细的FM-index，见下方说明：
+
+> 后缀数组（suffix array）的FM-index：
+>
+> <p align='center'><img src=./picture/BioLeetCode_how2deal_Hard_2-2-3.png height=400/></p>
+>
+> 以上图的BWT matrix为例，后缀数组由下面三个数组组成：
+>
+> - **SA数组**：LC对应行碱基在原始序列T中的位置（1-base）
+> - **OCC数组**：LC对应行碱基，在LC该行及该行之前出现的次数（0-base），例如对于LC的第5行（0-base）的碱基为a，在LC的第5行及第5行之前，a碱基只出现2次，故OCC[5]=1
+> - **BWT数组**：即BWT output，上图的给的例子中即为`gc$aaac`
+
+有了上面定义的三个参考序列的索引信息（BWT数组、OCC数组和Pre散列）后，BWT逆变换算法过程，就可以表示为以下形式：
+
+> 给定：BWT数组、OCC数组和Pre散列
+> 
+> 初始条件为：当前碱基位置index=0，即为FC的第一行，且当前碱基组成为base=\$，当前参考序列组成为T=\$
+> 
+> 循环执行下面的操作，直至当前碱基组成再一次为\$：
+> 
+> （1）回溯：获取LC同处于index行的碱基组成c，即c=BWT[index]，更新当前参考序列T=cT
+> 
+> （2）LC到FC的定位：获取LC处于index行的碱基c在FC对应的碱基的位置i，即i=Pre[c] + OCC[index]，更新当前碱基位置index=i
+
+示例代码：[Perl版本](./Answers/BWT_revTrans.pl)
 
 <a name="for-veterans-5"><h3>5. 相似数组搜索 [<sup>目录</sup>](#content)</h3></a>
 
