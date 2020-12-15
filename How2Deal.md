@@ -10,6 +10,7 @@
     - [5. 将输入的大Fasta文件拆分成若干个小Fasta文件](#for-beginer-5)
     - [6. 计算N50](#for-beginer-6)
     - [7. 计算测序深度(Coverage Depth)与覆盖度(Coverage Breadth)](#for-beginer-7)
+    - [8. 生成长度为n的所有碱基序列](#for-beginer-8)
 - [进阶题](#for-user-with-middle-level)
     - [1. 从Fastq文件中随机抽样一定量的数据](#for-user-with-middle-level-1)
     - [2. 将输入的大矩阵文件按照列拆分成若干个sub-matrixs文件](#for-user-with-middle-level-2)
@@ -103,6 +104,24 @@
 示例代码：[Perl版本](./Answers/calc_N50.pl)
 
 <a name="for-beginer-7"><h3>7. 计算测序深度(Coverage Depth)与覆盖度(Coverage Breadth) [<sup>目录</sup>](#content)</h3></a>
+
+<a name="for-beginer-8"><h3>8. 生成长度为n的所有碱基序列 [<sup>目录</sup>](#content)</h3></a>
+
+可以按照下面的结构来构造序列组成：
+
+<p align='center'><img src=./picture/BioLeetCode_how2deal_easy-8.png /></p>
+
+对于长度的n的序列，总共有$4^n$种可能的序列，将其当作一个$4^n \times n$的矩阵来构造，逐列进行碱基组成的填充：
+
+第一列，平均分成4个区块，，每个区块有$4^{n-1}$行，每个区块内的碱基组成相同，按照$A\to T \to C \to G$的顺序为每个区块选择碱基组成，对于其中的第$j$行，其碱基组成为由其所在的区块决定，其所在的块号为$b=\lceil i / 4^{n-1}\rceil$（$\lceil \cdot \rceil$表示向上取整），按照$A\to T \to C \to G$的顺序一个循环，其正好位于循环的第$b \% 4$个（$\%$表示取余运算）；
+
+第二列，平均分成16个区块，，每个区块有$4^{n-2}$行，每个区块内的碱基组成相同，按照$A\to T \to C \to G$的顺序为每个区块选择碱基组成，对于其中的第$j$行，其碱基组成为由其所在的区块决定，其所在的块号为$b=\lceil i / 4^{n-2}\rceil$，按照$A\to T \to C \to G$的顺序一个循环，其正好位于循环的第$b \% 4$个；
+
+...
+
+第$i$列，平均分成$4^i$个区块，，每个区块有$4^{n-i}$行，每个区块内的碱基组成相同，按照$A\to T \to C \to G$的顺序为每个区块选择碱基组成，对于其中的第$j$行，其碱基组成为由其所在的区块决定，其所在的块号为$b=\lceil i / 4^{n-j}\rceil$，按照$A\to T \to C \to G$的顺序一个循环，其正好位于循环的第$b \% 4$个
+
+示例代码：[Perl版本](./Answers/basePermutation.pl)
 
 <a name="for-user-with-middle-level"><h2>进阶题 [<sup>目录</sup>](#content)</h2></a>
 
