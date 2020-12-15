@@ -12,6 +12,7 @@
     - [5. 将输入的大Fasta文件拆分成若干个小Fasta文件](#for-beginer-5)
     - [6. 计算N50](#for-beginer-6)
     - [7. 计算测序深度(Coverage Depth)与覆盖度(Coverage Breadth)](#for-beginer-7)
+    - [8. 生成长度为n的所有碱基序列](#for-beginer-8)
 - [进阶题](#for-user-with-middle-level)
     - [1. 从Fastq文件中随机抽样一定量的数据](#for-user-with-middle-level-1)
     - [2. 将输入的大矩阵文件按照列拆分成若干个sub-matrixs文件](#for-user-with-middle-level-2)
@@ -227,6 +228,35 @@
     $$P(X \le d)=\frac{\sharp\lbrace (s,i) \mid D(s,i)\le d\rbrace}{\sharp\lbrace (s,i)\rbrace}=\sum_{i=0}^{d}P(X=i)$$
 
 查看解题思路，[点这里](./How2Deal.md#for-beginer-7)
+
+**友情提示**：请先尝试自行解决，然后再查看解题思路和示例代码
+
+<a name="for-beginer-8"><h3>8. 生成长度为n的所有碱基序列 [<sup>目录</sup>](#content)</h3></a>
+
+生成长度为n的所有碱基序列，每个碱基位点的碱基组成可能为$\lbrace A, T, C, G\rbrace$
+
+例如，当n=4时，所有可能的碱基序列为：
+
+```
+AAA
+AAT
+AAC
+AAG
+ATA
+ATT
+ATC
+ATG
+ACA
+ACT
+ACC
+ACG
+...
+GGG
+```
+
+总共有$4^n$种可能
+
+查看解题思路，[点这里](./How2Deal.md#for-beginer-8)
 
 **友情提示**：请先尝试自行解决，然后再查看解题思路和示例代码
 
