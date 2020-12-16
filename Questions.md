@@ -355,6 +355,14 @@ GGG
 
 <p align='center'><img src=./picture/BioLeetCode_issue_Hard_2-2-1.png height=300/></p>
 
+（2）方法二：
+
+根据BWT output逐列推出
+
+<p align='center'><img src=./picture/BioLeetCode_issue_Hard_2-2-2.png height=300/></p>
+
+通过构建出完整是BWT矩阵，来得到原始的输入序列
+
 要求：使用Perl、Python或R编写，从头实现，不允许调用现成的包或工具模块
 
 查看解题思路，[点这里](./How2Deal.md#for-veterans-2-2)
