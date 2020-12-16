@@ -271,7 +271,32 @@ $$\mathrm{LF(c,index)=Pre(c) + OCC(c)}$$
 > 
 > （2）LC到FC的定位：获取LC处于index行的碱基c在FC对应的碱基的位置i，即i=Pre[c] + OCC[index]，更新当前碱基位置index=i
 
-示例代码：[Perl版本](./Answers/BWT_revTrans.pl)
+示例代码：[Perl版本](./Answers/BWT_revTrans_V1.pl)
+
+(2)方法二
+
+<p align='center'><img src=./picture/BioLeetCode_issue_Hard_2-2-2.png height=300/></p>
+
+可以通过设置两个数组来实现：
+
+> - BWT数组：保存BWT转换后的BWT索引，即@BWT=('C', 'C', 'T', 'T', 'A', '$')
+> - Array数组：保存已经得到的部分BWT矩阵，每一个元素为部分BWT矩阵的一行
+
+按照以下流程来完成完整的BWT矩阵的构建：
+
+> - 初始状态：
+>
+>    @BWT=('C', 'C', 'T', 'T', 'A', '$')
+>
+>    @Array为空
+>
+> - 循环执行以下操作，直到Array的列数达到@BWT的长度：
+> 
+>   （1）@Array**之前**追加一列，为@BWT；
+> 
+>   （2）对@Array的行按照字母表顺序进行排序，得到重排后的BWT矩阵，以此来更新@Array；
+
+示例代码：[Perl版本](./Answers/BWT_revTrans_V2.pl)
 
 <a name="for-veterans-5"><h3>5. 相似数组搜索 [<sup>目录</sup>](#content)</h3></a>
 
