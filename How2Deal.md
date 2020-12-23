@@ -15,6 +15,8 @@
     - [1. 从Fastq文件中随机抽样一定量的数据](#for-user-with-middle-level-1)
     - [2. 将输入的大矩阵文件按照列拆分成若干个sub-matrixs文件](#for-user-with-middle-level-2)
     - [3. 将若干个单样本的表达定量结果汇总成一个大矩阵，即expression profile matrix](#for-user-with-middle-level-3)
+    - [6. 搜索串联重复序列](#for-user-with-middle-level-6)
+- [挑战题](#for-veterans)
 - [挑战题](#for-veterans)
     - [1. 分层Bootstrap抽样](#for-veterans-1)
     - [2. 手写BWT](#for-veterans-2)
@@ -178,6 +180,65 @@ $$E(X)=N . \frac{n}{N}=n$$
     获得行索引 i 和列索引 j 之后，就修改矩阵中对应元素的值了
 
     示例代码: [R版本](./Answers/MatrixMaker.R) [Python版本](./Answers/MatrixMaker.py)
+    
+<a name="for-user-with-middle-level-6"><h3>6. 搜索串联重复序列 [<sup>目录</sup>](#content)</h3></a>
+
+例如：给定目标序列
+
+GTACTACTACTACTACTACTG
+
+假如我们要在其中寻找单元长度为3的串联重复序列，那么这样的序列区段满足这样的特征：任意间隔为2nt的碱基位点，其碱基组成相同
+
+这样我们从第4个碱基开始比较当前位点与其上游偏移量为3nt位点的碱基组成，若相同则在当前碱基下方标记为1，否则为0，且将初始三个位点的标记为标为0（下面将这些标记称为score），则可以得到：
+
+```
+sequence: G T A C T A C T A C T A C T A C T A C T G
+score   : 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0
+repeat  :   -----------------------------------
+```
+
+上面的三行分别表示原始序列、score值和串联重复序列的所在范围
+
+从中可以看出一些规律：
+
+（1）串联重复序列的所在范围与score=1的连续区段，在分别上基本一致；
+
+（2）串联重复序列的起始位置$\mathrm{start}_i$相对于score=1的连续区段起始位置$\mathrm{start}_j$，左偏3nt，即$\mathrm{start}_i=\mathrm{start}_j-3$
+
+（3）串联重复序列的终末位置$\mathrm{end}_i$，由score=1的连续区段终末位置$\mathrm{end}_j$决定，且要求：
+
+$$ 
+\begin{cases}
+    \mathrm{end}_i - \mathrm{start}_i = 3k \\
+    0\le\mathrm{end}_j - \mathrm{end}_i<3
+\end{cases}
+$$
+
+即要求串联重复序列区段的长度是3的倍数，且串联重复序列区段的末端尽可能靠近score=1的连续区段的末端
+
+或者可以表示为：
+
+$$k=\lfloor \frac{\mathrm{end}_j - \mathrm{start}_i}{3} \rfloor$$
+
+$$\mathrm{end}_j=\mathrm{start}_i + 3k$$
+
+其中k是串联重复序列的重复次数
+
+因此该方法重点是获得各个位点的score值，这里可以用长度为3的队列来辅助得到各个位点的score值：
+
+> 先创建一个长度为3的空队列，然后从左到右逐一将目标序列的碱基取出入队：
+>
+> 若队列未满，则将该碱基直接从队尾入队，并给出当前碱基的score=0；
+>
+> 若队列已满，则先将队首元素，即队首碱基取出，与当前待入队碱基进行比较，若碱基相同，则给出当前碱基的score=1，否则为0；
+> 
+> <p align='center'><img src=./picture/BioLeetCode_how2deal_middle_6.gif width=600/></p>
+
+以上是搜索单元长度为3的串联重复序列，其他长度的重复序列的做法与此类似，不过需要创建的队列长度不同而已，且队列长度与单元长度相同
+
+因此同时创建对应单元长度范围的一系列队列，则可以同时进行不同单元长度重复序列的搜索
+
+示例代码：[Perl版本](./Answers/TandemRepeat.pl)
 
 <a name="for-veterans"><h2>挑战题 [<sup>目录</sup>](#content)</h2></a>
 
