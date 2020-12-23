@@ -19,7 +19,7 @@
     - [3. 将若干个单样本的表达定量结果汇总成一个大矩阵，即expression profile matrix](#for-user-with-middle-level-3)
     - [4. 根据samtools mpileup的输出，推断genotype](#for-user-with-middle-level-4)
     - [5. 根据给定的Motif代表序列集算出PWM矩阵](#for-user-with-middle-level-5)
-
+    - [6. 搜索串联重复序列](#for-user-with-middle-level-6)
 - [挑战题](#for-veterans)
     - [1. 分层Bootstrap抽样](#for-veterans-1)
     - [2. 手写BWT](#for-veterans-2)
@@ -300,6 +300,32 @@ GGG
 要求：使用Perl、Python或R编写，从头实现，不允许调用现成的包或工具模块
 
 查看解题思路，[点这里](./How2Deal.md#for-user-with-middle-level-3)
+
+<a name="for-user-with-middle-level-6"><h3>6. 搜索串联重复序列 [<sup>目录</sup>](#content)</h3></a>
+
+任务：统计人参考基因组中满足下述要求的短串联重复序列：以1~6个碱基单元组成的DNA重复序列，重复次数大于等于5且小于等于50。
+
+处理规则：
+
+（1）相同个数时，选择起始位置小的输出；
+
+例如：GTATATATATATATG，输出的是TA而非AT，对应个数是6.
+
+（2）不同个数时，选择个数多的输出；
+
+示例：
+
+例如：GTATATATATATATG，输出TA，对应个数是6
+
+输出结果：
+
+| 染色体 | 起始位置 | 单元 | 个数 |
+|:---|:---|:---|:---|
+| 1 | 2 | TA | 6 |
+
+要求：使用Perl、Python或R编写，从头实现，不允许调用现成的包或工具模块
+
+查看解题思路，[点这里](./How2Deal.md#for-user-with-middle-level-6)
 
 <a name="for-veterans"><h2>挑战题 [<sup>目录</sup>](#content)</h2></a>
 
