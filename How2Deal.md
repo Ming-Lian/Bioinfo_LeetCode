@@ -109,6 +109,8 @@
 
 <a name="for-beginer-8"><h3>8. 生成长度为n的所有碱基序列 [<sup>目录</sup>](#content)</h3></a>
 
+（1）方法一
+
 可以按照下面的结构来构造序列组成：
 
 <p align='center'><img src=./picture/BioLeetCode_how2deal_easy-8.png /></p>
@@ -123,7 +125,39 @@
 
 第$i$列，平均分成$4^i$个区块，，每个区块有$4^{n-i}$行，每个区块内的碱基组成相同，按照$A\to T \to C \to G$的顺序为每个区块选择碱基组成，对于其中的第$j$行，其碱基组成为由其所在的区块决定，其所在的块号为$b=\lceil i / 4^{n-j}\rceil$，按照$A\to T \to C \to G$的顺序一个循环，其正好位于循环的第$b \% 4$个
 
-示例代码：[Perl版本](./Answers/basePermutation.pl)
+示例代码：[Perl版本](./Answers/basePermutation_V1.pl)
+
+（2）方法二
+
+<p align='center'><img src=./picture/BioLeetCode_how2deal_easy-8-2.png /></p>
+
+为了降级算法的空间复杂度，提高空间的利用效率，可以采用队列这个数据结构来实现
+
+<p align='center'><img src=./picture/BioLeetCode_how2deal_easy-8-2_1.gif /></p>
+
+<p align='center'>序列长度为1时</p>
+
+<p align='center'><img src=./picture/BioLeetCode_how2deal_easy-8-2_2.gif /></p>
+
+<p align='center'>序列长度为2时</p>
+
+可以通过下面的步骤来实现：
+
+> 初始状态：空队列Queue，碱基组成数组@Base={'A', 'C', 'G', 'T'}，当前碱基位置i=0，目标碱基序列长度n
+> 
+> 重复执行以下操作，直到当前碱基序列长度达到n，即i==n-1时：
+> 
+> （1）获取当前的队列长度l；
+> 
+> （2）若当前队列为空，即l==0时，或者当前碱基位置为0时，逐一让@Base中的碱基入队
+> 
+> <p align='center'><img src=./picture/BioLeetCode_how2deal_easy-8-2_1.gif width=300/></p>
+> 
+> 若当前队列非空，即l>0时，反复执行l次【1次出队-4次入队】的组合操作
+> 
+> <p align='center'><img src=./picture/BioLeetCode_how2deal_easy-8-2_2.gif width=300/></p>
+
+示例代码：[Perl版本](./Answers/basePermutation_V2.pl)
 
 <a name="for-user-with-middle-level"><h2>进阶题 [<sup>目录</sup>](#content)</h2></a>
 
