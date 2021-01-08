@@ -17,7 +17,6 @@
     - [3. 将若干个单样本的表达定量结果汇总成一个大矩阵，即expression profile matrix](#for-user-with-middle-level-3)
     - [6. 搜索串联重复序列](#for-user-with-middle-level-6)
 - [挑战题](#for-veterans)
-- [挑战题](#for-veterans)
     - [1. 分层Bootstrap抽样](#for-veterans-1)
     - [2. 手写BWT](#for-veterans-2)
         - [2.1. Burrows-Wheeler Transformation](#for-veterans-2-1)
@@ -26,6 +25,7 @@
     - [4. 手写de Bruijn assembly](#for-veterans-4)
     - [5. 相似数组搜索](#for-veterans-5)
     - [6. 从头实现后缀树的序列比对：从树构建到序列比对](#for-veterans-6)
+    - [8. 拼写错误纠正](#for-veterans-8)
 
 <a name="for-beginer"><h2>入门题 [<sup>目录</sup>](#content)</h2></a>
 
@@ -438,3 +438,39 @@ $$\mathrm{LF(c,index)=Pre(c) + OCC(c)}$$
 > - 倒排索引：[什么是倒排索引？](https://blog.csdn.net/starzhou/article/details/87519973)
 >
 > - 链表：[Python实现链表](https://www.cnblogs.com/wangxiayun/p/8358991.html)
+
+<a name="for-veterans-8"><h3>8. 拼写错误纠正 [<sup>目录</sup>](#content)</h3></a>
+
+1、拼写检查器的原理
+
+介绍一下它的工作原理。给定一个单词，我们的任务是选择和它最相似的拼写正确的单词（如果这个单词本身拼写就是正确的, 那么最相近的就是它自己啦）。 当然，不可能绝对的找到相近的单词，比如说给定 lates 这个单词，它应该别更正为 late 呢 还是 latest 呢？这些困难指示我们，需要使用概率论，而不是基于规则的判断。我们说，给定一个词 w，在所有正确的拼写词中，我们想要找一个正确的词 c，使得对于 w 的条件概率最大，也就是说：
+
+$$\argmax_c P( c| w)$$
+
+按照**贝叶斯理论**上面的式子等价于：
+
+$$\argmax_c \frac{P(w\mid c) P(c)}{P(w)}$$
+
+因为用户可以输错任何词，因此对于任何 c 来讲，出现 w 的概率 P(w) 都是一样的，从而我们在上式中忽略它，写成：
+
+$$\argmax_c P(w\mid c) P(c)$$
+
+这个式子有三个部分，从右到左，分别是：
+
+> 1. $P(c)$:文章中出现一个正确拼写词 c 的概率，也就是说，在英语文章中，c 出现的概率有多大呢？因为这个概率完全由英语这种语言决定，我们称之为做**语言模型**。好比说，英语中出现 the 的概率  P('the') 就相对高，而出现  P('zxzxzxzyy') 的概率接近0（假设后者也是一个词的话）
+>
+> 2. $P(w|c)$：在用户想键入 c 的情况下敲成 w 的概率。因为这个是代表用户会以多大的概率把 c 敲错成 w，因此这个被称为 **误差模型**
+>
+> 3. $\argmax_c$：用来枚举所有可能的 c 并且选取概率最大的，因为我们有理由相信，一个（正确的）单词出现的频率高，用户又容易把它敲成另一个错误的单词，那么，那个敲错的单词应该被更正为这个正确的
+
+2、实现细节
+
+示例代码：[Python版本](./Answers/SpellingCorrect.py)
+
+参考资料：
+
+> [How to Write a Spelling Corrector](http://norvig.com/spell-correct.html)
+> 
+> [20来行的Python拼写检查器](https://blog.csdn.net/nirendao/article/details/50640139)
+> 
+> [数学之美番外篇：平凡而又神奇的贝叶斯方法](http://mindhacks.cn/2008/09/21/the-magical-bayesian-method/)
