@@ -26,6 +26,8 @@
       - [2.1. Burrows-Wheeler Transformation](#for-veterans-2-1)
       - [2.2. BWT reverse transformation](#for-veterans-2-2)
       - [2.3. BWT search](#for-veterans-2-3)
+        - [2.3.1. BWT Exact Matching](#for-veterans-2-3-1)
+        - [2.3.2. BWT Inexact Matching](#for-veterans-2-3-2)
       - [2.4. maximal exact matches (MEMs)](#for-veterans-2-4)
     - [3. 手写BLAST](#for-veterans-3)
     - [4. 手写de Bruijn](#for-veterans-4)
@@ -364,11 +366,11 @@ GGG
 
 - FC与LC在同一行$i$的碱基，在参考序列中是一后一前紧挨着的关系
 
-    利用这种关系，我们就可以某一个碱基的在参考序列的前一个碱基或者后一个碱基的组成
+    利用这种关系，我们就可以找到某一个碱基的在参考序列的前一个碱基或者后一个碱基的组成
 
 - 按照从上到下的计数方式，FC中第i次遇到的碱基a与LC中第i次遇到的碱基a，是参考序列中的同一个碱基，即它们在参考序列上对应于同一个碱基位置
 
-    利用这种关系，我们可以FC（或LC）第i行碱基在LC（或FC）所对应的碱基的位置
+    利用这种关系，我们可以找到FC（或LC）第i行碱基在LC（或FC）所对应的碱基的位置
 
 那么，利用上面的两条性质，我们可以按照下面的方法实现BWT逆变换：
 
@@ -395,6 +397,44 @@ GGG
 查看解题思路，[点这里](./How2Deal.md#for-veterans-2-2)
 
 **友情提示**：请先尝试自行解决，然后再查看解题思路和示例代码
+
+<a name="for-veterans-2-3"><h4>2.3. BWT search [<sup>目录</sup>](#content)</h4></a>
+
+<a name="for-veterans-2-3-1"><h5>2.3.1. BWT Exact Matching [<sup>目录</sup>](#content)</h5></a>
+
+给定一条参考序列：CGTGCCTACTTACTTACTTACTTACGCGAA
+
+对于来自参考序列的一段子序列：CTTACTTAC
+
+```
+CGTGCCTACTTACTTACTTACTTACGCGAA
+        |||||||||
+        CTTACTTAC
+```
+
+基于BWT的性质，找出其在参考序列中完全匹配的起始位置（1-base）
+
+基本过程如下图：
+
+<p align='center'><img src=./picture/BioLeetCode_issue_Hard_2-3-1.png height=500/></p>
+
+<p align='center'><img src=./picture/BioLeetCode_issue_Hard_2-3-2.png height=500/></p>
+
+<p align='center'><img src=./picture/BioLeetCode_issue_Hard_2-3-3.png height=500/></p>
+
+从而确定子序列CTTACTTAC可以匹配到参考序列的3个位置：
+
+```
+CGTGCCTACTTACTTACTTACTTACGCGAA
+        CTTACTTAC
+            CTTACTTAC
+                CTTACTTAC
+```
+
+查看解题思路，[点这里](./How2Deal.md#for-veterans-2-3)
+
+<a name="for-veterans-2-3-2"><h5>2.3.2. BWT Inexact Matching [<sup>目录</sup>](#content)</h5></a>
+
 
 <a name="for-veterans-5"><h3>5. 相似数组搜索 [<sup>目录</sup>](#content)</h3></a>
 
