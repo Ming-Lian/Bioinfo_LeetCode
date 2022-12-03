@@ -5,14 +5,17 @@
 - [项目说明](#introduction)
 - [Q&A](#question-and-answer)
 - [入门题](#for-beginer)
-    - [1. RNA序列翻译成蛋白质](#for-beginer-1)
-    - [2. 获得反向互补序列](#for-beginer-2)
-    - [3. 根据序列ID，提取目标序列](#for-beginer-3)
-    - [4. 双端未匹配数据的重新匹配](#for-beginer-4)
-    - [5. 将输入的大Fasta文件拆分成若干个小Fasta文件](#for-beginer-5)
-    - [6. 计算N50](#for-beginer-6)
-    - [7. 计算测序深度(Coverage Depth)与覆盖度(Coverage Breadth)](#for-beginer-7)
-    - [8. 生成长度为n的所有碱基序列](#for-beginer-8)
+    - [01. RNA序列翻译成蛋白质](#for-beginer-01)
+    - [02. 获得反向互补序列](#for-beginer-02)
+    - [03. 读入Fastq文件解析成对应的序列和质量](#for-beginer-03)
+    - [04. 统计Fastq序列中的碱基质量值分布](#for-beginer-04)
+    - [05. 统计多条reads的位点GC比例的变化](#for-beginer-05)
+    - [06. 根据序列ID，提取目标序列](#for-beginer-06)
+    - [07. 双端未匹配数据的重新匹配](#for-beginer-07)
+    - [08. 将输入的大Fasta文件拆分成若干个小Fasta文件](#for-beginer-08)
+    - [09. 计算N50](#for-beginer-09)
+    - [10. 计算测序深度(Coverage Depth)与覆盖度(Coverage Breadth)](#for-beginer-10)
+    - [11. 生成长度为n的所有碱基序列](#for-beginer-11)
 - [进阶题](#for-user-with-middle-level)
     - [1. 从Fastq文件中随机抽样一定量的数据](#for-user-with-middle-level-1)
     - [2. 将输入的大矩阵文件按照列拆分成若干个sub-matrixs文件](#for-user-with-middle-level-2)
@@ -22,17 +25,26 @@
     - [6. 搜索串联重复序列](#for-user-with-middle-level-6)
 - [挑战题](#for-veterans)
     - [1. 分层Bootstrap抽样](#for-veterans-1)
-    - [2. 手写BWT](#for-veterans-2)
-      - [2.1. Burrows-Wheeler Transformation](#for-veterans-2-1)
-      - [2.2. BWT reverse transformation](#for-veterans-2-2)
-      - [2.3. BWT search](#for-veterans-2-3)
-        - [2.3.1. BWT Exact Matching](#for-veterans-2-3-1)
-        - [2.3.2. BWT Inexact Matching](#for-veterans-2-3-2)
-      - [2.4. maximal exact matches (MEMs)](#for-veterans-2-4)
-    - [3. 手写BLAST](#for-veterans-3)
-    - [4. 手写de Bruijn](#for-veterans-4)
-      - [4.1. 构建de Bruijn graph](#for-veterans-4-1)
-      - [4.2. 搜索欧拉路径](#for-veterans-4-2)
+    - [2. 序列比对的算法实现](#for-veterans-2)
+      - [2.1. 精确匹配：暴力枚举法(Brute-Force)](#for-veterans-2-1)
+      - [2.2. 精确匹配：Boyer-Moore](#for-veterans-2-2)
+      - [2.3. 精确匹配：k-mer index](#for-veterans-2-3)
+      - [2.4. 精确匹配：基因组排序索引](#for-veterans-2-4)
+        - [2.4.1. Suffix Array](#for-veterans-2-4-1)
+        - [2.4.2. Suffix Tree](#for-veterans-2-4-2)
+        - [2.4.3. FM index (BWT)](#for-veterans-2-4-3)
+      - [2.5. 容错匹配：基于暴力枚举的容错匹配法](#for-veterans-2-5)
+      - [2.6. 容错匹配：鸽洞原则（Pigeonhole principle）](#for-veterans-2-6)
+      - [2.7. 容错匹配：动态规划（Dynamic programming）](#for-veterans-2-7)
+      - [2.8. 容错匹配：最聪明的策略 —— index + dynamic programming）](#for-veterans-2-8)
+    - [3. 手写BWT](#for-veterans-3)
+      - [3.1. Burrows-Wheeler Transformation](#for-veterans-3-1)
+      - [3.2. BWT reverse transformation](#for-veterans-3-2)
+      - [3.3. BWT search](#for-veterans-3-3)
+        - [3.3.1. BWT Exact Matching](#for-veterans-3-3-1)
+        - [3.3.2. BWT Inexact Matching](#for-veterans-3-3-2)
+      - [3.4. maximal exact matches (MEMs)](#for-veterans-3-4)
+    - [4. 基因组拼接的算法实现](#for-veterans-4)
     - [5. 相似数组搜索](#for-veterans-5)
     - [6. 从头实现后缀树的序列比对：从树构建到序列比对](#for-veterans-6)
     - [7. 手写samtools部分功能](#for-veterans-7)
@@ -130,19 +142,97 @@
 
 <a name="for-beginer"><h2>入门题 [<sup>目录</sup>](#content)</h2></a>
 
-<a name="for-beginer-1"><h3>1. RNA序列翻译成蛋白质 [<sup>目录</sup>](#content)</h3></a>
+<a name="for-beginer-01"><h3>01. RNA序列翻译成蛋白质 [<sup>目录</sup>](#content)</h3></a>
 
 给定：氨基酸密码子表，和一个保存多条RNA序列的Fasta文件
 
 任务：得到RNA序列翻译得到的氨基酸序列，保存为Fasta文件
 
-<a name="for-beginer-2"><h3>2. 获得反向互补序列 [<sup>目录</sup>](#content)</h3></a>
+<a name="for-beginer-02"><h3>02. 获得反向互补序列 [<sup>目录</sup>](#content)</h3></a>
 
 给定：一条DNA序列
 
 任务：得到这条DNA序列的反向互补序列
 
-<a name="for-beginer-3"><h3>3. 根据序列ID，提取目标序列 [<sup>目录</sup>](#content)</h3></a>
+```python
+def reverseComplement(s):
+    complement = {'A': 'T', 'C': 'G', 'G': 'C', 'T': 'A'}
+    t = ''
+    for base in s:
+        t = complement[base] + t
+    return t
+reverseComplement('ACCATTG')
+```
+
+<a name="for-beginer-03"><h3>03. 读入Fastq文件解析成对应的序列和质量 [<sup>目录</sup>](#content)</h3></a>
+
+给定：一个标准的fastq文件
+
+任务：将它读入后解析成两个列表：sequences，保存每条测序序列；qualities，保存每条测序序列的碱基质量编码
+
+```python
+def readFastq(filename):
+    sequences = []
+    qualities = []
+    with open(filename) as fh:
+        while True:
+            fh.readline() # skip name line
+            seq = fh.readline().rstrip() # read base sequence
+            fh.readline() # skip placeholder line
+            qual = fh.readline().rstrip() #base quality line
+            if len(seq) == 0:
+                break
+            sequences.append(seq)
+            qualities.append(qual)
+    return sequences, qualities
+seqs, quals = readFastq('SRR835775_1.first1000.fastq')
+```
+
+<a name="for-beginer-04"><h3>04. 统计Fastq序列中的碱基质量值分布 [<sup>目录</sup>](#content)</h3></a>
+
+给定：上一节 [03. 读入Fastq文件解析成对应的序列和质量](#for-beginer-03) 中得到的qualities列表对象，保存每条测序序列的碱基质量编码（phred33）
+
+任务：统计序列中的碱基质量值分布，得到每个Q值的频次
+
+```python
+def createHist(qualityStrings):
+    # Create a histogram of quality scores
+    hist = [0]*50
+    for read in qualityStrings:
+        for phred in read:
+            q = ord(phred) - 33
+            hist[q] += 1
+    return hist
+h = createHist(quals)
+```
+
+<a name="for-beginer-05"><h3>05. 统计多条reads的位点GC比例的变化 [<sup>目录</sup>](#content)</h3></a>
+
+给定：上一节 [03. 读入Fastq文件解析成对应的序列和质量](#for-beginer-03) 中得到的sequences列表对象，保存每条测序序列
+
+任务：统计多条reads的位点GC比例
+
+```python
+def findGCByPos(reads):
+    ''' Find the GC ratio at each position in the read '''
+    # Keep track of the number of G/C bases and the total number of bases at each position
+    gc = [0] * 100
+    totals = [0] * 100
+    for read in reads:
+        for i in range(len(read)):
+            if read[i] == 'C' or read[i] == 'G':
+                gc[i] += 1
+            totals[i] += 1
+    # Divide G/C counts by total counts to get the average at each position
+    for i in range(len(gc)):
+        if totals[i] > 0:
+            gc[i] /= float(totals[i])
+    return gc
+
+gc = findGCByPos(seqs)
+```
+
+<a name="for-beginer-06"><h3>06. 根据序列ID，提取目标序列 [<sup>目录</sup>](#content)</h3></a>
 
 根据序列ID，提取目标序列
 
@@ -154,7 +244,7 @@
 
 **友情提示**：请先尝试自行解决，然后再查看解题思路和示例代码
 
-<a name="for-beginer-4"><h3>4. 双端未匹配数据的重新匹配 [<sup>目录</sup>](#content)</h3></a>
+<a name="for-beginer-07"><h3>07. 双端未匹配数据的重新匹配 [<sup>目录</sup>](#content)</h3></a>
 
 给定：一个样本的双端测序文件（Attachments文件夹下的R1.fastq和R2.fastq），且这双端Forward-end与Reverse-end同一行的序列并非如标准PE数据那样一一对应，即来源于同一个fragment
 
@@ -164,7 +254,7 @@
 
 **友情提示**：请先尝试自行解决，然后再查看解题思路和示例代码
 
-<a name="for-beginer-5"><h3>5. 将输入的大Fasta文件拆分成若干个小Fasta文件 [<sup>目录</sup>](#content)</h3></a>
+<a name="for-beginer-08"><h3>08. 将输入的大Fasta文件拆分成若干个小Fasta文件 [<sup>目录</sup>](#content)</h3></a>
 
 给定：一个包含有大量序列的Fasta文件
 
@@ -179,7 +269,7 @@
 
 **友情提示**：请先尝试自行解决，然后再查看解题思路和示例代码
 
-<a name="for-beginer-6"><h3>6. 计算N50 [<sup>目录</sup>](#content)</h3></a>
+<a name="for-beginer-09"><h3>09. 计算N50 [<sup>目录</sup>](#content)</h3></a>
 
 给定：包含多条contig的fasta文件
 
@@ -195,7 +285,7 @@
 
 **友情提示**：请先尝试自行解决，然后再查看解题思路和示例代码
 
-<a name="for-beginer-7"><h3>7. 计算测序深度(Coverage Depth)与覆盖度(Coverage Breadth) [<sup>目录</sup>](#content)</h3></a>
+<a name="for-beginer-10"><h3>10. 计算测序深度(Coverage Depth)与覆盖度(Coverage Breadth) [<sup>目录</sup>](#content)</h3></a>
 
 给定：samtools mpileup的输出文件（Pileup格式）
 
@@ -234,7 +324,7 @@
 
 **友情提示**：请先尝试自行解决，然后再查看解题思路和示例代码
 
-<a name="for-beginer-8"><h3>8. 生成长度为n的所有碱基序列 [<sup>目录</sup>](#content)</h3></a>
+<a name="for-beginer-11"><h3>11. 生成长度为n的所有碱基序列 [<sup>目录</sup>](#content)</h3></a>
 
 生成长度为n的所有碱基序列，每个碱基位点的碱基组成可能为$\lbrace A, T, C, G\rbrace$
 
@@ -334,9 +424,33 @@ GGG
 
 <a name="for-veterans-1"><h3>1. 分层Bootstrap抽样 [<sup>目录</sup>](#content)</h3></a>
 
-<a name="for-veterans-2"><h3>2. 手写BWT [<sup>目录</sup>](#content)</h3></a>
+<a name="for-veterans-2"><h3>2. 序列比对的算法实现 [<sup>目录</sup>](#content)</h3></a>
 
-<a name="for-veterans-2-1"><h4>2.1. Burrows-Wheeler Transformation [<sup>目录</sup>](#content)</h4></a>
+<a name="for-veterans-2-1"><h4>2.1. 暴力枚举法(Brute-Force) [<sup>目录</sup>](#content)</h4></a>
+
+```python
+def naive(p, t):
+    occurrences = []
+    for i in range(len(t) - len(p) + 1):
+        match = True
+        for j in range(len(p)):
+            if t[i+j] != p[j]:
+                match = False
+                break
+        if match:
+          occurrences.append(i)
+    return occurrences
+
+t = 'AGCTTAGATAGC'
+p = 'AG'
+naive(p, t)
+
+[0, 5, 9]
+```
+
+<a name="for-veterans-3"><h3>3. 手写BWT [<sup>目录</sup>](#content)</h3></a>
+
+<a name="for-veterans-3-1"><h4>3.1. Burrows-Wheeler Transformation [<sup>目录</sup>](#content)</h4></a>
 
 给定：一条核酸序列，例如：TCATC
 
@@ -352,9 +466,9 @@ GGG
 
 **友情提示**：请先尝试自行解决，然后再查看解题思路和示例代码
 
-<a name="for-veterans-2-2"><h4>2.2. BWT reverse transformation [<sup>目录</sup>](#content)</h4></a>
+<a name="for-veterans-3-2"><h4>3.2. BWT reverse transformation [<sup>目录</sup>](#content)</h4></a>
 
-给定：BWT output，以[2.1. Burrows-Wheeler Transformation](#for-veterans-2-1)的输出结果`CCTTA$`为例
+给定：BWT output，以[3.1. Burrows-Wheeler Transformation](#for-veterans-3-1)的输出结果`CCTTA$`为例
 
 任务：根据BWT output，还原出其原始的输入序列
 
@@ -398,9 +512,9 @@ GGG
 
 **友情提示**：请先尝试自行解决，然后再查看解题思路和示例代码
 
-<a name="for-veterans-2-3"><h4>2.3. BWT search [<sup>目录</sup>](#content)</h4></a>
+<a name="for-veterans-3-3"><h4>3.3. BWT search [<sup>目录</sup>](#content)</h4></a>
 
-<a name="for-veterans-2-3-1"><h5>2.3.1. BWT Exact Matching [<sup>目录</sup>](#content)</h5></a>
+<a name="for-veterans-3-3-1"><h5>3.3.1. BWT Exact Matching [<sup>目录</sup>](#content)</h5></a>
 
 给定一条参考序列：CGTGCCTACTTACTTACTTACTTACGCGAA
 
@@ -433,8 +547,9 @@ CGTGCCTACTTACTTACTTACTTACGCGAA
 
 查看解题思路，[点这里](./How2Deal.md#for-veterans-2-3)
 
-<a name="for-veterans-2-3-2"><h5>2.3.2. BWT Inexact Matching [<sup>目录</sup>](#content)</h5></a>
+<a name="for-veterans-3-3-2"><h5>3.3.2. BWT Inexact Matching [<sup>目录</sup>](#content)</h5></a>
 
+<a name="for-veterans-4"><h3>4. 基因组拼接的算法实现 [<sup>目录</sup>](#content)</h3></a>
 
 <a name="for-veterans-5"><h3>5. 相似数组搜索 [<sup>目录</sup>](#content)</h3></a>
 
